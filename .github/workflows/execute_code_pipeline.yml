@@ -3,8 +3,6 @@
 # This workflow deploys an AWS Code Pipeline (CP) and then runs it. If the CP
 # already exists it does not recreate it.
 #
-# These parameters can be overridden with repo's action variables:
-#
 name: main
 
 on:
