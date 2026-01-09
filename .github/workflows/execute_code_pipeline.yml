@@ -84,7 +84,7 @@ jobs:
 
       - uses: actions/create-github-app-token@v2
         id: app-token
-        if: ${{ github.event.inputs.STATUS_REPO_OWNER != '' && github.event.inputs.STATUS_REPOSITORY != '' }}
+        if: ${{ inputs.STATUS_REPO_OWNER != '' && inputs.STATUS_REPOSITORY != '' }}
         with:
           app-id: ${{ steps.app-creds.outputs.APP_ID }}
           private-key: ${{ steps.app-creds.outputs.APP_PRIVATE_KEY }}
@@ -112,7 +112,7 @@ jobs:
           echo "PIPELINE_CONSOLE_URL=https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/pipelines/${{ steps.pipeline-deploy.outputs.PipelineName }}/view" >> $GITHUB_ENV
 
       - name: Pending Status
-        if: ${{ github.event.inputs.STATUS_REPO_OWNER != '' && github.event.inputs.STATUS_REPOSITORY != '' }}
+        if: ${{ inputs.STATUS_REPO_OWNER != '' && inputs.STATUS_REPOSITORY != '' }}
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
@@ -154,7 +154,7 @@ jobs:
 
         # since app credentials only last an hour we have to get new ones
       - uses: actions/create-github-app-token@v2
-        if: ${{ always() && github.event.inputs.STATUS_REPO_OWNER != '' && github.event.inputs.STATUS_REPOSITORY != '' }}
+        if: ${{ always() && inputs.STATUS_REPO_OWNER != '' && inputs.STATUS_REPOSITORY != '' }}
         id: app-token-2
         with:
           app-id: ${{ steps.app-creds.outputs.APP_ID }}
@@ -164,7 +164,7 @@ jobs:
 
 
       - name: Success Status
-        if: ${{ github.event.inputs.STATUS_REPO_OWNER != '' && github.event.inputs.STATUS_REPOSITORY != '' }}
+        if: ${{ inputs.STATUS_REPO_OWNER != '' && inputs.STATUS_REPOSITORY != '' }}
         env:
           GITHUB_TOKEN: ${{ steps.app-token-2.outputs.token }}
         run: |
@@ -175,7 +175,7 @@ jobs:
           -f "target_url=${{ env.PIPELINE_CONSOLE_URL }}"
 
       - name: Failed Status
-        if: ${{ failure() && github.event.inputs.STATUS_REPO_OWNER != '' && github.event.inputs.STATUS_REPOSITORY != '' }}
+        if: ${{ failure() && inputs.STATUS_REPO_OWNER != '' && inputs.STATUS_REPOSITORY != '' }}
         env:
           GITHUB_TOKEN: ${{ steps.app-token-2.outputs.token }}
         run: |
@@ -186,7 +186,7 @@ jobs:
           -f "target_url=${{ env.PIPELINE_CONSOLE_URL }}"
 
       - name: Cancelled Status
-        if: ${{ cancelled() && github.event.inputs.STATUS_REPO_OWNER != '' && github.event.inputs.STATUS_REPOSITORY != '' }}
+        if: ${{ cancelled() && inputs.STATUS_REPO_OWNER != '' && inputs.STATUS_REPOSITORY != '' }}
         env:
           GITHUB_TOKEN: ${{ steps.app-token-2.outputs.token }}
         run: |
