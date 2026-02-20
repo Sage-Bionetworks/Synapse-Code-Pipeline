@@ -131,6 +131,8 @@ jobs:
             --query 'pipelineExecutionId' --output text)
 
           echo "EXECUTION_ID=$EXECUTION_ID" >> $GITHUB_ENV
+          # Now update the Pipeline Console URL to point to the executing pipeline
+          echo "PIPELINE_CONSOLE_URL=https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/pipelines/${{ steps.pipeline-deploy.outputs.PipelineName }}/executions/$EXECUTION_ID/visualization" >> $GITHUB_ENV
 
           # if the status check is too soon, the executing pipeline is not found and the workflow fails
           sleep 10
