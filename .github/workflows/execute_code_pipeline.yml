@@ -109,7 +109,7 @@ jobs:
           template: ${{ inputs.CODE_PIPELINE_CF_TEMPLATE }}
           name: ${{ inputs.PIPELINE_NAME }}
           capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM
-          parameter-overrides: ${{ inputs.PIPELINE_PARAMETERS }},GitHubToken=${{ secrets.GITHUB_TOKEN }}
+          parameter-overrides: ${{ inputs.PIPELINE_PARAMETERS }}
 
       - name: Output Pipeline Console URL
         run: |
@@ -129,9 +129,12 @@ jobs:
       - name: Trigger CodePipeline
         id: pipeline-run
         run: |
+          START_ARGS="--name ${{ steps.pipeline-deploy.outputs.PipelineName }}"
+          if [ -n "${{ inputs.CODE_PIPELINE_SOURCE_REVISIONS }}" ]; then
+            START_ARGS="$START_ARGS --source-revisions ${{ inputs.CODE_PIPELINE_SOURCE_REVISIONS }}"
+          fi
           EXECUTION_ID=$(aws codepipeline start-pipeline-execution \
-            --name ${{ steps.pipeline-deploy.outputs.PipelineName }} \
-            --source-revisions ${{ inputs.CODE_PIPELINE_SOURCE_REVISIONS }} \
+            $START_ARGS \
             --query 'pipelineExecutionId' --output text)
 
           echo "EXECUTION_ID=$EXECUTION_ID" >> $GITHUB_ENV
