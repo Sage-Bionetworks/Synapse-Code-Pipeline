@@ -103,13 +103,14 @@ jobs:
           ref: ${{ inputs.REPOSITORY_BRANCH }}
 
       - name: Deploy CodePipeline to AWS CloudFormation
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        uses: aws-actions/aws-cloudformation-github-deploy@v2
         id: pipeline-deploy
         with:
           template: ${{ inputs.CODE_PIPELINE_CF_TEMPLATE }}
           name: ${{ inputs.PIPELINE_NAME }}
           capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM
           parameter-overrides: ${{ inputs.PIPELINE_PARAMETERS }}
+          fail-on-empty-changeset: false
 
       - name: Output Pipeline Console URL
         run: |
