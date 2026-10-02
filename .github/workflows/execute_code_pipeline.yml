@@ -122,7 +122,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           gh api --method POST \
-          /repos/${{ inputs.STATUS_REPO_OWNER }}/${{ inputs.STATUS_REPOSITORY }}/statuses/${{ github.sha }} \
+          /repos/${{ inputs.STATUS_REPO_OWNER }}/${{ inputs.STATUS_REPOSITORY }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
           -f "state=pending" \
           -f "description=Build in Progress" \
           -f "target_url=${{ env.PIPELINE_CONSOLE_URL }}"
@@ -176,7 +176,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token-2.outputs.token }}
         run: |
           gh api --method POST \
-          /repos/${{ inputs.STATUS_REPO_OWNER }}/${{ inputs.STATUS_REPOSITORY }}/statuses/${{ github.sha }} \
+          /repos/${{ inputs.STATUS_REPO_OWNER }}/${{ inputs.STATUS_REPOSITORY }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
           -f "state=success" \
           -f "description=Build Succeeded" \
           -f "target_url=${{ env.PIPELINE_CONSOLE_URL }}"
@@ -187,7 +187,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token-2.outputs.token }}
         run: |
           gh api --method POST \
-          /repos/${{ inputs.STATUS_REPO_OWNER }}/${{ inputs.STATUS_REPOSITORY }}/statuses/${{ github.sha }} \
+          /repos/${{ inputs.STATUS_REPO_OWNER }}/${{ inputs.STATUS_REPOSITORY }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
           -f "state=failure" \
           -f "description=Build Failed" \
           -f "target_url=${{ env.PIPELINE_CONSOLE_URL }}"
@@ -198,7 +198,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token-2.outputs.token }}
         run: |
           gh api --method POST \
-          /repos/${{ inputs.STATUS_REPO_OWNER }}/${{ inputs.STATUS_REPOSITORY }}/statuses/${{ github.sha }} \
+          /repos/${{ inputs.STATUS_REPO_OWNER }}/${{ inputs.STATUS_REPOSITORY }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
           -f "state=failure" \
           -f "description=Build Cancelled" \
           -f "target_url=${{ env.PIPELINE_CONSOLE_URL }}"
